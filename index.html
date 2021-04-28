@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Project 2</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <link rel="icon"
+      type="image/png"
+      href="/images/btc_icon.png" />
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+  </head>
+
+  <body>
+    <div class="project-container">
+      <h1>The Musk Effect vs COVID-friggin-19</h1>
+      <h3>Who had the biggest impact on the stock market?</h3>
+      <p class="rule">
+        Explore the influence of Elon's tweets and COVID-19 events on Bitcoin, Dogecoin and Tesla stock prices over the past 12 months.
+      </p>
+      <br>
+      <p>
+        <h3>Fight Rules:</h3>
+        <p class="rule">1. If the selected move has a <b>negative</b> effect on the stock price, opponent takes damage</p>
+        <p class="rule">2. If the selected move has a <b>positive</b> effect on the stock price, opponent heals by little</p>
+        <p class="rule">3. Damage value scales according to how much effect your move has on the stock prices</p>
+      </p>
+
+
+
+      <div class = 'character-bar'>
+        <img class = 'elon-character' src="/images/elon.png" >
+        <svg id="character-svg" height="150" width="1000"></svg>
+        <img class = 'covid-character' src="/images/corona.png" >
+      </div>
+
+      <!-- <span class="elonspan" id ="elontext"></span>
+      <span class="covidspan" id ="covidtext"></span> -->
+
+      <div class = 'health-div'>
+        <svg id="health" height="80" width="1300">
+        </svg>
+      </div>
+
+      <div class="wrapper">
+        <div class="elon_div">
+          <div class="divider"></div>
+          <button id = "date1" class ="muskbutton" date = "04-01-2021">Space Dance</button>
+          <div class="divider"></div>
+          <button  id = "date2" class ="muskbutton" date = "03-24-2021">Bit Punch</button>
+          <div class="divider"></div>
+          <button id = "date4" class ="muskbutton" date = "03-12-2021">Boring Charm</button>
+          <div class="divider"></div>
+          <button id = "date3" class ="muskbutton" date = "03-13-2021">Dog Whip</button>
+          <div class="divider"></div>
+          <button id = "date5" class ="muskbutton" date = "03-05-2021">God Move</button>
+          <div class="divider"></div>
+          <button id = "date6" class ="muskbutton" date = "02-14-2021">Sonic Hold</button>
+          <div class="divider"></div>
+          <button id = "date7" class ="muskbutton" date = "02-04-2021">Cryto Slam</button>
+          <div class="divider"></div>
+          <button id = "date8" class ="muskbutton" date = "12-20-2020">Safe Shield</button>
+          <div class="divider"></div>
+          <button id = "date9" class ="muskbutton" date = "07-02-2020">Model Smack</button>
+          <div class="divider"></div>
+          <button id = "date10" class ="muskbutton" date = "06-10-2020">Charge</button>
+          <div class="divider"></div>
+          <button id = "date11" class ="muskbutton" date = "05-11-2020">Growth</button>
+          <div class="divider"></div>
+          <button id = "date12" class ="muskbutton" date = "04-14-2020">Giga Drain</button>
+        </div>
+
+
+        <div class="mainsvg">
+          <svg id="boxing-ring" height="550" width="1000"></svg>
+        </div>
+
+        <div class="covid_div">
+          <div class="divider"></div>
+          <button id = "date-r1" class ="covidbutton" date ="12-29-2020">Shock Wave</button>
+          <div class="divider"></div>
+          <button id = "date-r2" class ="covidbutton" date = "12-14-2020">Needle Arm</button>
+          <div class="divider"></div>
+          <button id = "date-r3" class ="covidbutton" date = "11-08-2020">Top Spin</button>
+          <div class="divider"></div>
+          <button id = "date-r4" class ="covidbutton" date = "10-02-2020">Outrage</button>
+          <div class="divider"></div>
+          <button id = "date-r5" class ="covidbutton" date = "09-29-2020">Orange Strike</button>
+          <div class="divider"></div>
+          <button id = "date-r6" class ="covidbutton" date = "08-03-2020">Double Hit</button>
+          <div class="divider"></div>
+          <button id = "date-r7" class ="covidbutton" date = "07-07-2020">Withdraw</button>
+          <div class="divider"></div>
+          <button id = "date-r8" class ="covidbutton" date = "06-08-2020">Contraction</button>
+          <div class="divider"></div>
+          <button id = "date-r9" class ="covidbutton" date = "05-27-2020">Overheat</button>
+          <div class="divider"></div>
+          <button id = "date-r10" class ="covidbutton" date = "04-20-2020">Orange Block</button>
+          <div class="divider"></div>
+          <button id = "date-r11" class ="covidbutton" date = "04-18-2020">Positive Dance</button>
+          <div class="divider"></div>
+          <button id = "date-r12" class ="covidbutton" date = "04-09-2020">GG New York</button>
+        </div>
+
+      </div>
+
+      <h2>Select an Arena:</h2>
+
+
+      <div class="stock-button-div">
+        <button  id="bitcoin-button" class="stock-button">Bitcoin</button>
+        <button  id="dogecoin-button" class="stock-button">Dogecoin</button>
+        <button  id="tesla-button" class="stock-button">Tesla</button>
+      </div>
+      <div class="row align-items-center">
+        <div class="col-sm-2 slider-value"><p id="value-range"></p></div>
+        <div class="col-sm"><div id="slider-range"></div></div>
+        <button id="clear-filter-button" class="reset-scale">Clear Filter</button>
+      </div>
+
+      <script>
+
+      const requestData = async () => {
+
+
+        const svg = d3.select("svg#boxing-ring");
+        const width = svg.attr("width");
+        const height = svg.attr("height");
+        const margin = {top: 30, right: 30, bottom: 30, left: 60};
+        const chartWidth = width - margin.left - margin.right;
+        const chartHeight = height - margin.top - margin.bottom;
+
+        const linePlotHeight = chartHeight*0.6;
+        const histogramPlotHeight = chartHeight*0.3;
+
+        // const elonColor = "#5C15B7"
+        // const covidColor = "#E20E8A"
+        // const greenColor = "#4DC175"
+        // const redColor = "#CA0F2C"
+
+        const blueAccent = "#0455FA"
+        const salmonAccent = "#FE784B"
+        const yellowAccent = "#FEC737"
+        const purpleAccent = "#D050E4"
+
+        const elonColor = "#0455FA"
+        const covidColor = "#FE784B"
+
+        const greenColor = "#3ED177"
+        const redColor = "#EE313A"
+
+
+        const colorScale = d3.scaleOrdinal().domain(["bitcoin","doge","tesla"]).range(["rgba(254,199,55,0.3)","rgba(254,199,55,0.3)", "rgba(254,199,55,0.3)"]);
+
+        let annotations = svg.append("g").attr("id","annotations");
+        let chartArea = svg.append("g").attr("id","points")
+                           .attr("transform",`translate(${margin.left},${margin.top})`);
+
+        let histArea = svg.append("g").attr("id","histogram-chart")
+                          .attr("transform",`translate(${margin.left},${margin.top + linePlotHeight + chartHeight*0.1})`);
+
+        histArea.append("line")
+                .attr("id", "hist-axis")
+                .style("stroke", "black")
+                .style("stroke-width", 1)
+                .attr("x1", -10)
+                .attr("y1",histogramPlotHeight/2.0)
+                .attr("x2",chartWidth)
+                .attr("y2",histogramPlotHeight/2.0)
+
+        const bitcoin = await d3.csv("/dataset/BTC-USD-1.csv");
+        const tesla = await d3.csv("/dataset/TSLA-1.csv");
+        const doge = await d3.csv("/dataset/DOGEUSD-1.csv");
+        const covid = await d3.csv("/dataset/covid.csv");
+        const tweet = await d3.csv("/dataset/tweets.csv");
+
+        let selectedStock = bitcoin; //dataset
+        let stockName = "bitcoin";
+
+        // draw character bar
+        const characterSvg = d3.select("svg#character-svg");
+        const characterWidth = characterSvg.attr("width");
+        const characterHeight = characterSvg.attr("height");
+
+        characterSvg.append("image")
+                    .attr("class","vs")
+                    .attr("xlink:href", "/images/versus.png")
+                    .attr("width", 100)
+                    .attr("x", characterWidth/2.0 - 60)
+                    .attr("y", characterHeight/2.0 - 10)
+
+
+        // draw health bar
+        const healthSvg = d3.select("svg#health");
+        const healthWidth = healthSvg.attr("width");
+        const healthHeight = healthSvg.attr("height");
+
+        // character names
+        healthSvg.append("text")
+                 .text("Elon Musk")
+                 .attr("class", "character-name")
+                 .attr("x", 0)
+                 .attr("y", 40)
+                 .style("fill", "white")
+
+        healthSvg.append("text")
+                 .text("Corona")
+                 .attr("class", "character-name")
+                 .attr("x", healthWidth - 90)
+                 .attr("y", 40)
+                 .style("fill", "white")
+
+
+
+        // health bar
+        //ELON's HEALTH
+        healthSvg.append('rect').attr("id","healthbar-frame")
+                                 .attr("fill", "#DDD")
+                                 .attr("height", 20)
+                                 .attr("width", 500)
+                                 .attr("x", 2)
+                                 .attr("y", 50)
+                                 .attr("stroke-width","2px")
+                                 .style("stroke", "black")
+
+
+        const healthFull = 498;
+        var elon_deathCheck=healthFull;
+        var covid_deathCheck=healthFull;
+
+        healthSvg.append('rect').attr("id","elon-decrease")
+                                .attr("fill", greenColor)
+                                .attr("height", 18)
+                                .attr("width", healthFull)
+                                .attr("x", 3)
+                                .attr("y", 51)
+                                .style("stroke", "none")
+
+        //COVID's HEALTH
+        healthSvg.append('rect').attr("id","healthbar-frame")
+                                .attr("fill", "#DDD")
+                                .attr("height", 20)
+                                .attr("width", 500)
+                                .attr("x", healthWidth - 500 - 2)
+                                .attr("y", 50)
+                                .attr("stroke-width","2px")
+                                .style("stroke", "black")
+
+        healthSvg.append('rect').attr("id","covid-decrease")
+                                .attr("fill", greenColor)
+                                .attr("height", 18)
+                                .attr("width", healthFull)
+                                .attr("x", healthWidth - 500 - 1)
+                                .attr("y", 51)
+                                .style("stroke", "none")
+
+
+
+
+
+        //data cleaning - since we assume there is no dramatical change to the stock price
+        //we cansmooth the null data by duplicating previous point
+
+        let prev = {"Date" : "4/2/2020", "Close" : "6793.624512"}
+        bitcoin.forEach(d => {
+            //round func
+            var f = d3.format(".2f");
+            if (d.Close === "null") {
+                //update data if it is null
+                //we also keep record of what this fake data orignally from
+                d.Close = Number(f(prev.Close))
+                d.High = d.Close
+                d.Low = d.Close
+                d.datafrom = prev.Date
+
+            }
+
+            else{
+                prev.Date = d.Date
+                prev.Close = d.Close
+                d.Close = Number(f(d.Close))
+
+
+            }
+        });
+
+        tesla.forEach(d =>{
+          var f = d3.format(".2f");
+          d.Close = Number(f(d.Close))
+        })
+
+        let doge_prev = {"Date" : "4/2/2020", "Close" : "0.001882"}
+        doge.forEach(d => {
+          var f = d3.format(".4f");
+            if (d.Close === "null") {
+                //update data if it is null
+                //we also keep record of what this fake data orignally from
+                d.Close = Number(f(doge_prev.Close))
+                d.High = d.Close
+                d.Low = d.Close
+                d.datafrom = doge_prev.Date
+
+            }
+
+            else{
+                doge_prev.Date = d.Date
+                doge_prev.Close = d.Close
+                d.Close = Number(f(d.Close))
+            }
+        });
+
+        //DEFAULT BITCOIN ---------------------------------------
+
+        // console.log(bitcoin);
+        // console.log(doge);
+        // console.log(tesla);
+
+        const timeParser = d3.timeParse('%Y-%m-%d');
+        const tweetParser = d3.timeParse('%m/%d/%Y');
+        var firstprice = 0
+
+        //loop over data record price for previous date and parse date
+        bitcoin.forEach( d => {
+          d['pre_price'] =  firstprice
+          d['date'] = tweetParser(d.Date);
+          d['type'] = 'bitcoin'
+          firstprice = d['Close']
+        });
+        //initialize
+        var firstprice = 0
+        doge.forEach( d => {
+          d['pre_price'] =  firstprice
+          d['date'] = tweetParser(d.Date);
+          d['type'] = 'doge'
+          firstprice = d['Close']
+        });
+        //initialize
+        var firstprice = 0
+        tesla.forEach( d => {
+          d['pre_price'] =  firstprice
+          d['date'] = tweetParser(d.Date);
+          d['type'] = 'tesla'
+          firstprice = d['Close']
+        });
+        tweet.forEach(d => {
+          d['date'] = tweetParser(d.tweet_date);
+        });
+        covid.forEach(d => {
+          d['date'] = tweetParser(d.event_date);
+        });
+
+
+        //line plot
+
+        const dateExtent = d3.extent(bitcoin, d => d.date)
+        const dateScale = d3.scaleTime().domain(dateExtent).range([0,chartWidth]);
+
+        const priceExtent = d3.extent(bitcoin, d => d.Close);
+        const priceScale = d3.scaleLinear().domain([priceExtent[0],priceExtent[1]*1.1]).range([linePlotHeight, 0]);
+
+        let leftAxis = d3.axisLeft(priceScale).tickFormat(d3.format("$"));
+        let leftGridlines = d3.axisLeft(priceScale)
+                              .tickSize(-chartWidth-10)
+                              .tickFormat("")
+
+        let leftAxisG = annotations.append("g")
+                                  .attr("class", "y axis")
+                                  .attr("transform",`translate(${margin.left-10},${margin.top})`)
+                                  .call(leftAxis)
+
+        let leftGridlinesG = annotations.append("g")
+                                  .attr("class", "y gridlines")
+                                  .attr("transform",`translate(${margin.left-10},${margin.top})`)
+                                  .call(leftGridlines);
+
+
+        let bottomAxis = d3.axisBottom(dateScale)
+
+        let bottomGridlines = d3.axisBottom(dateScale)
+                                .tickSize(-linePlotHeight-10)
+                                .tickFormat("")
+
+        let bottomAxisG = annotations.append("g")
+                                      .attr("class", "x axis")
+                                      .attr("transform",`translate(${margin.left},${linePlotHeight+margin.top+10})`)
+                                      .call(bottomAxis);
+        let bottomGridlinesG = annotations.append("g")
+                                     .attr("class", "x gridlines")
+                                     .attr("transform",`translate(${margin.left},${linePlotHeight+margin.top+10})`)
+                                     .call(bottomGridlines);
+
+
+        //histogram plot
+
+        var percentMemory = [];
+        const percentExtent = [-10,10];
+        const percentScale = d3.scaleLinear().domain(percentExtent).range([histogramPlotHeight, 0]);
+
+         let leftHistAxis = d3.axisLeft(percentScale).tickFormat(d3.format("")).ticks(8);
+         let leftHistGridlines = d3.axisLeft(percentScale)
+                               .tickSize(-chartWidth-10)
+                               .tickFormat("")
+                               .ticks(8)
+
+         let leftHistAxisG = annotations.append("g")
+                                   .attr("class", "y axis")
+                                   .attr("transform",`translate(${margin.left-10},${margin.top + linePlotHeight + chartHeight*0.1})`)
+                                   .call(leftHistAxis)
+
+         let leftHistGridlinesG = annotations.append("g")
+                                   .attr("class", "y gridlines")
+                                   .attr("transform",`translate(${margin.left-10},${margin.top + linePlotHeight + chartHeight*0.1})`)
+                                   .call(leftHistGridlines);
+
+
+        var lineGen = d3.line();
+
+        buttonFilterUpdate(bitcoin, colorScale("bitcoin")); //DEFAULT
+        d3.select("#bitcoin-button").attr("class"," stock-button lastSelected");//
+
+        const textbox = chartArea.append("g").attr("transform","translate(10,10)").attr("id","text_box")
+
+        //string length function according to class notes (link:https://jeffrz.github.io/info3300-sp2021/notes/21.03.17.notes.htm)
+        function stringLen(str) {
+          const dummytext = chartArea.append("text")
+                                     .attr("class","legendtext")
+                                     .attr("visibility","hidden");
+          dummytext.text(str)
+          let len = dummytext.node().getComputedTextLength();
+          dummytext.remove()
+          return len;
+        }
+
+        //function for talk animations
+        const typeeffect = (text) => {
+            const textArr = text.split('');
+            let index = 0;
+            const timer = setInterval(() => {
+                const showText = textArr.slice(0, index).join('');
+                // console.log(showText);
+                d3.select('.attack-text').text(showText);
+                index++;
+                if (index > textArr.length) clearInterval(timer);
+            }, renderMemoryState?0:20);
+        }
+
+        var moveID = 0;
+        var MemoryMovesArray = [];
+
+
+        const details = chartArea.append("g")
+
+        var renderMemoryState = false;
+
+
+//MOVE BUTTON UPDATES --------------------------------------------------------------------
+
+        //update box with tweets
+        function buttonupdatebox(dt, character) {
+
+          let current_att;
+          let attacks;
+          let maxWidth;
+          var elonTurn = true;
+
+          if(character==="elon"){
+            current_att = tweet.filter(function(d) { return d.tweet_date == dt })[0]
+            attacks = current_att.tweets
+            maxWidth = Math.max( stringLen(attacks), stringLen("Stock not trading over weekends "))
+          }else if (character==="covid") {
+            current_att = covid.filter(function(d) { return d.event_date == dt })[0]
+            attacks = current_att.events
+            maxWidth = Math.max( stringLen(attacks), stringLen("Stock not trading over weekends "))
+
+             elonTurn = false;
+          }
+
+
+          current_dt = chartArea.selectAll("path").datum()
+
+
+          let Priceextent = d3.extent(current_dt, d => d.Close)
+          let Dateextent = d3.extent(current_dt, d=> d.date)
+
+
+          //update scale
+          dateScale.domain(Dateextent);
+          //priceScale.domain(Priceextent);
+
+          //remove updates
+          d3.select('#focus-area').remove()
+          if(renderMemoryState!=true){
+            d3.select('#selection_rect').remove()
+            d3.select("#middle_l").remove()
+          }
+
+          //show past moves
+          // d3.selectAll(`#move-memory.${stockName}`).attr("visibility", "")
+
+          var movePoints = d3.selectAll(`#move-memory.${stockName}`)
+
+          movePoints.attr("visibility", "")
+          movePoints.on("mouseover",mouseOverLogic)
+                    .on("mouseout", mouseOutLogic)
+
+
+
+          if ((dt == '12/20/2020' || dt == '2/4/2021' || dt == '3/13/2021' || dt == '2/14/2021' || dt == '4/18/2020' || dt == "11/8/2020") && current_dt[0].type == 'tesla') {
+            var price = "Stock not trading over weekends "
+          }
+          else{
+            var price_dt = current_dt.filter(function(d){ return String(d.date) === String(current_att.date)})
+            var pre_price = price_dt[0].pre_price
+            var price = price_dt[0].Close
+            var high_p = price_dt[0].High
+            var low_p = price_dt[0].Low
+            var height = Math.abs( priceScale(price_dt[0].High) - priceScale(price_dt[0].Low))
+
+            if(renderMemoryState!=true){
+
+              chartArea.append('circle').attr("id","focus-area")
+                                        .attr("fill",elonTurn?"rgba(37,117,255,0.05)":"rgba(254,121,75,0.05)")
+                                        .attr("stroke",elonTurn?"rgba(37,117,255,0.15)":"rgba(254,121,75,0.15)")
+                                        .attr("stroke-width",2)
+                                        .attr("cx",dateScale(price_dt[0].date))
+                                        .attr("cy",priceScale(price))
+                                        .attr("r",50)
+
+              chartArea.append('circle').attr("id","move-memory")
+                                        .attr("class", stockName)
+                                        .attr("fill",elonTurn?elonColor:covidColor)
+                                        .attr("cx",dateScale(price_dt[0].date))
+                                        .attr("cy",priceScale(price))
+                                        .attr("r",5)
+                                        .attr("moveNumber", moveID)
+                                        .attr("character", character)
+                                        .attr("move", attacks)
+                                        // .attr("date", dt)
+                                        .attr("visibility", "hidden")
+                                        .attr("percent_after", price_dt[0].percent_after)
+                                        .attr('close', price_dt[0].Close)
+                                        .attr('date', price_dt[0].Date)
+
+              //middle line for each point
+              chartArea.append('line').attr("id","middle_l")
+                                      .attr("x1",dateScale(price_dt[0].date))
+                                      .attr("y1", priceScale(price) - height * 0.5 - 20)
+                                      .attr("x2", dateScale(price_dt[0].date))
+                                      .attr("y2",priceScale(price) + height * 0.5 + 20)
+                                      .style("stroke", "black")
+                                      .attr("stroke-width","2px")
+                                      .style("stroke-dasharray","3");
+              //box for high & low price
+              chartArea.append('rect').attr("id","selection_rect")
+                                        .attr("fill", "none")
+                                        .attr("height", height)
+                                        .attr("y", priceScale(price) - 0.5 * height)
+                                        .attr("x", dateScale(price_dt[0].date)- 0.5*10)
+                                        .attr("width",10)
+                                        .attr("stroke-width","2px")
+                                        .style("stroke", "black")
+                                        .attr("opacity", 1)
+
+            }
+          }
+
+          d3.select("#box").remove()
+          d3.select("#character-box").remove()
+
+          chartArea.append("rect").attr("id","box").attr("class","box")
+                                            .attr("x", 0).attr("y", 0)
+                                            .attr("rx", 5).attr("ry", 5)
+                                            .attr("height", 150)
+                                            // .attr("width", maxWidth*0.9)
+                                            .attr("width", 220)
+
+          characterSvg.append("rect").attr("id","character-box")
+                                     .style("fill", elonTurn?elonColor:covidColor)
+                                     .style("stroke", "none")
+                                     // .style("stroke-width", 3)
+                                     .attr("x", elonTurn?"2":characterWidth-maxWidth-30)
+                                     .attr("y", 40)
+                                     .attr("rx", 10)
+                                     .attr("ry", 10)
+                                     .attr("height", characterHeight*0.55)
+                                     .attr("width", maxWidth+25)
+
+
+
+          //text box upper left
+          d3.select("#text_box").remove()
+
+          const textbox = chartArea.append("g").attr("transform","translate(15,10)").attr("id","text_box")
+
+          // textbox.append("text").text("").attr("x", 0).attr("y", 10)
+          textbox.append("text")
+                 .text("Date: " + dt)
+                 .attr("x", 0)
+                 .attr("y", 20)
+                 .style("font-weight", "bold")
+                 .style("font-size", 15)
+
+          d3.select(".move-text").remove()
+          d3.select(".attack-text").remove()
+          d3.selectAll("#inputtext").text("");
+
+          characterSvg.append("text")
+                      .attr("class", "move-text")
+                      .text(elonTurn?"Elon's Tweet":"Covid Event")
+                      .attr("x", elonTurn?"15":characterWidth - 125)
+                      .attr("y", 70)
+                      .attr("fill","white")
+
+          characterSvg.append("text")
+                      // .text(attacks)
+                      .attr("id", "inputtext")
+                      .attr("class", "attack-text")
+                      .attr("fill", "white")
+                      .attr("x", elonTurn?"15":characterWidth-maxWidth-17)
+                      .attr("y", 100)
+                      .attr("width", characterWidth/2.0 - 120)
+                      .attr("font-size", "15px")
+
+          typeeffect(attacks);
+
+          //filter out weekends
+          if ((dt == '12/20/2020' || dt == '2/4/2021' || dt == '3/13/2021' || dt == '2/14/2021' || dt == '4/18/2020' || dt == "11/8/2020") && current_dt[0].type == 'tesla') {
+            textbox.append("text").text( price).attr("x", 0).attr("y", 45)
+            textbox.append("text").text("").attr("x", 0).attr("y", 65)
+          }
+          else {
+            var f = d3.format(".3f")
+            textbox.append("text").text("Close Price: $" + price).attr("x", 0).attr("y", 45)
+
+            var current_width = 0;
+            let attackDamage = 60;
+            let healing = 20;
+
+            var currentHealth = healthFull;
+
+
+            //HEALTH BAR LOGIC
+            //if stock price change is NEGATIVE, opponent takes damage
+            //if stock price change is POSITIVE, opponent heals by a little amount
+
+
+            if (pre_price < price) {
+
+              percent = ((price - pre_price) / pre_price ) * 100
+              increase = (price - pre_price)
+
+              textbox.append("text").text("+ " + f(increase) + ' (' + f(percent) + '%)' ).attr("x", 0).attr("y", 120).style('fill',greenColor).attr("font-size", "20px").style("font-weight", "bold")
+              textbox.append("text").text("High Price: $" + f(high_p)).attr("x", 0).attr("y", 65).style('fill','black')
+              textbox.append("text").text("Low Price: $" + f(low_p)).attr("x", 0).attr("y", 85).style('fill','black')
+
+
+              if(renderMemoryState!= true){
+
+                //update percentage scale
+                percentMemory.push(percent);
+                percentMemory.push(-percent);
+                newPercent = d3.extent(percentMemory)
+
+
+                MemoryMovesArray.push({
+                  class: stockName,
+                  date: dt,
+                  character: character
+                })
+
+                percentScale.domain([newPercent[0]*1.3,newPercent[1]*1.3]);
+
+                leftHistAxis.scale(percentScale);
+                leftHistAxisG.call(leftHistAxis)
+                leftHistGridlines.scale(percentScale);
+                leftHistGridlinesG.call(leftHistGridlines)
+
+                //Update past histogram line lengths
+                d3.selectAll("#histogram").each(function(){
+                  d = d3.select(this);
+                  percentSize = Number(d.attr("percent"))
+                  d.attr("y2", percentScale(percentSize))
+
+                });
+
+
+                //add new histogram
+                var moveLines = histArea.append("line")
+                                        .attr("id", "histogram")
+                                        .attr("class", stockName)
+                                        .style("stroke", elonTurn?elonColor:covidColor)
+                                        .style("stroke-width", 5)
+                                        .attr("x1", dateScale(price_dt[0].date))
+                                        .attr("y1", histogramPlotHeight/2.0)
+                                        .attr("x2", dateScale(price_dt[0].date))
+                                        .attr("y2", percentScale(percent))
+                                        .attr("moveNumber", moveID)
+                                        .attr("character", character)
+                                        .attr("move", attacks)
+                                        // .attr("date", dt)
+                                        .attr("visibility", "")
+                                        .attr('percent', percent)
+                                        .attr("percent_after", price_dt[0].percent_after)
+                                        .attr('close', price_dt[0].Close)
+                                        .attr('date', price_dt[0].Date)
+
+                //update box color
+                d3.selectAll("#selection_rect").style("stroke", greenColor)
+
+                healing = healing*percent;
+                console.log(character + " gave opponent: +" + healing + " health");
+
+                //Elon negative market effect (BAD) -> Covid increases health
+                if(character==="elon") {
+
+                  current_width = Number(d3.select('rect#covid-decrease').attr("width"))
+
+                  if (current_width + healing > healthFull) {
+                    //append to full
+                    currentHealth = healthFull;
+                    d3.select('#covid-decrease').transition().duration(500).attr("width", currentHealth)
+                  }
+                  else {
+                    current_posX = Number(d3.select('rect#covid-decrease').attr("x"))
+                    currentHealth = current_width + healing;
+                    d3.select('#covid-decrease').transition().duration(500).attr("width", currentHealth).attr("x", current_posX - healing)
+
+                  }
+
+                }
+
+                //Covid negative market effect (BAD) -> Elon increase health
+                if(character==="covid") {
+
+                  current_width = Number(d3.select('rect#elon-decrease').attr("width"))
+
+                  if (current_width + healing > healthFull) {
+                    currentHealth = healthFull;
+                    d3.select('#elon-decrease').transition().duration(500).attr("width", currentHealth)
+
+                  }
+                  else {
+                    currentHealth = current_width + healing;
+                    d3.select('#elon-decrease').transition().duration(500).attr("width", currentHealth)
+                  }
+                }
+
+                healing=50; //reset
+
+              }
+
+            }
+            else if(pre_price == price) {
+
+              textbox.append("text").text("Change: " + '0' + '%' ).attr("x", 0).attr("y", 120).style('fill',greenColor).attr("font-size", "20px").style("font-weight", "bold")
+              textbox.append("text").text("High Price: $" + f(high_p)).attr("x", 0).attr("y", 65).style('fill','black')
+              textbox.append("text").text("Low Price: $" + f(low_p)).attr("x", 0).attr("y", 85).style('fill','black')
+
+            }
+            else {
+
+              percent = ((pre_price - price) / pre_price ) * 100
+              decrease = (pre_price - price)
+
+              textbox.append("text").text("- "  + f(decrease) + ' ('+ f(percent) + '%)').attr("x", 0).attr("y", 120).style('fill',redColor).attr("font-size", "20px").style("font-weight", "bold")
+              textbox.append("text").text("High Price: $" + f(high_p)).attr("x", 0).attr("y", 65).style('fill','black')
+              textbox.append("text").text("Low Price: $" + f(low_p)).attr("x", 0).attr("y", 85).style('fill','black')
+
+
+              if(renderMemoryState != true){
+                //update percentage scale
+                percentMemory.push(percent);
+                percentMemory.push(-percent);
+                newPercent = d3.extent(percentMemory)
+
+                MemoryMovesArray.push({
+                  class: stockName,
+                  date: dt,
+                  character: character
+                })
+
+
+                percentScale.domain([newPercent[0]*1.3,newPercent[1]*1.3]);
+
+                leftHistAxis.scale(percentScale);
+                leftHistAxisG.call(leftHistAxis)
+                leftHistGridlines.scale(percentScale);
+                leftHistGridlinesG.call(leftHistGridlines)
+
+                //Update past histogram line lengths
+                d3.selectAll("#histogram").each(function(){
+                  d = d3.select(this);
+                  percentSize = Number(d.attr("percent"))
+                  d.attr("y2", percentScale(percentSize))
+
+                });
+
+                moveLines = histArea.append("line")
+                                    .attr("id", "histogram")
+                                    .attr("class", stockName)
+                                    .style("stroke", elonTurn?elonColor:covidColor)
+                                    .style("stroke-width", 5)
+                                    .attr("x1", dateScale(price_dt[0].date))
+                                    .attr("y1", histogramPlotHeight/2.0)
+                                    .attr("x2", dateScale(price_dt[0].date))
+                                    .attr("y2", percentScale(-percent))
+                                    .attr("moveNumber", moveID)
+                                    .attr("character", character)
+                                    .attr("move", attacks)
+                                    .attr("date", dt)
+                                    .attr("visibility", "")
+                                    .attr('percent', -percent)
+                                    .attr("percent_after", price_dt[0].percent_after)
+                                    .attr('close', price_dt[0].Close)
+                                    .attr('date', price_dt[0].Date)
+
+
+                attackDamage = attackDamage*percent;
+                console.log(character + " attacked with: -" + attackDamage + " damage");
+
+                //Elon positive market effect (GOOD) -> Covid takes damage
+                if(character==="elon") {
+
+                  current_width = Number(d3.select('rect#covid-decrease').attr("width"))
+                  if (current_width - attackDamage < 0 ) {
+                    currentHealth = 0;
+                    current_posX = Number(d3.select('rect#covid-decrease').attr("x"))
+                    d3.select('#covid-decrease').transition().duration(500).attr("width", currentHealth).attr("x", current_posX + current_width )
+                  }
+                  else {
+                    // covid takes damage
+                    currentHealth =  current_width - attackDamage;
+                    current_posX = Number(d3.select('rect#covid-decrease').attr("x"))
+                    d3.select('#covid-decrease').transition().duration(500).attr("width", currentHealth).attr("x", current_posX + attackDamage )
+                  }
+                }
+
+                //Covid positive market effect (GOOD) -> Elon takes damage
+                if(character==="covid") {
+
+                  current_width = Number(d3.select('rect#elon-decrease').attr("width"))
+
+                  if (current_width - attackDamage < 0) {
+                    //append to 0
+                    currentHealth = 0;
+                    d3.select('#elon-decrease').transition().duration(500).attr("width", currentHealth)
+
+                  }
+                  else {
+                    currentHealth =  current_width - attackDamage;
+                    d3.select('#elon-decrease').transition().duration(500).attr("width", currentHealth)
+
+                  }
+                }
+
+                //victory check
+                victoryCheck(attackDamage, character);
+
+                attackDamage=60; //reset
+                //update rect color
+                d3.selectAll("#selection_rect").style("stroke", redColor)
+
+              }
+
+              }
+
+            }
+
+            try{
+              moveLines.on("mouseover",mouseOverLogic)
+                        .on("mouseout", mouseOutLogic)
+            }catch(e){
+            }
+
+            //change health color
+            updateHealthBarColor(character, currentHealth);
+
+            moveID++; //increase moveID to prepare for next move
+          }
+
+
+  //RELOAD MEMORY --------------------------------------------------------------------
+
+          //update box with tweets
+          function reloadMemory(dt, character) {
+
+            let current_att;
+            let attacks;
+            elonTurn = true;
+            if (character==="covid") {
+               elonTurn = false;
+            }
+
+            current_dt = chartArea.selectAll("path").datum()
+
+            let DTextent = d3.extent(current_dt, d=> d.date)
+            //update scale
+            dateScale.domain(DTextent);
+
+            if ((dt == '12/20/2020' || dt == '2/4/2021' || dt == '3/13/2021' || dt == '2/14/2021' || dt == '4/18/2020' || dt == "11/8/2020") && current_dt[0].type == 'tesla') {
+              price = "Stock not trading over weekends "
+            }
+            else{
+              const parser1 = d3.timeParse('%Y-%m-%d')
+              const parser2 = d3.timeParse('%m/%d/%Y')
+              var price_date = current_dt.filter(function(d){
+                d1 = String(parser2(d.Date))
+                d2 = String(parser2(dt))
+                return d1 === d2
+              })
+
+              // console.log(price_date);
+
+              if(price_date.length != 0){
+                // console.log(price_date);
+                if( (price_date[0].date >= DTextent[0] && price_date[0].date <= DTextent[1]) && price_date.length != 0 ) {
+                  pre_price = price_date[0].pre_price
+                  price = price_date[0].Close
+                  high_p = price_date[0].High
+                  low_p = price_date[0].Low
+
+                  var movePoints = chartArea.append('circle').attr("id","move-memory")
+                                            .attr("class", stockName)
+                                            .attr("fill",elonTurn?elonColor:covidColor)
+                                            .attr("cx",dateScale(price_date[0].date))
+                                            .attr("cy",priceScale(price))
+                                            .attr("r",5)
+                                            .attr("moveNumber", moveID)
+                                            .attr("character", character)
+                                            .attr("move", attacks)
+                                            // .attr("date", dt)
+                                            .attr("visibility", "")
+                                            .attr("percent_after", price_date[0].percent_after)
+                                            .attr('close', price_date[0].Close)
+                                            .attr('date', price_date[0].Date)
+
+                  movePoints.on("mouseover",mouseOverLogic)
+                            .on("mouseout", mouseOutLogic)
+
+                }
+              }
+
+            }
+            //filter out weekends
+            if(price_date.length != 0){
+
+              if ((dt == '12/20/2020' || dt == '2/4/2021' || dt == '3/13/2021' || dt == '2/14/2021' || dt == '4/18/2020' || dt == "11/8/2020") && current_dt[0].type == 'tesla') {
+              }
+              else if ( (price_date[0].date >= DTextent[0] && price_date[0].date <= DTextent[1])) {
+                if (pre_price < price) {
+                  percent = ((price - pre_price) / pre_price ) * 100
+                  increase = (price - pre_price)
+
+                  //update percentage scale
+                  percentMemory.push(percent);
+                  percentMemory.push(-percent);
+                  newPercent = d3.extent(percentMemory)
+
+                  percentScale.domain([newPercent[0]*1.3,newPercent[1]*1.3]);
+
+                  leftHistAxis.scale(percentScale);
+                  leftHistAxisG.call(leftHistAxis)
+                  leftHistGridlines.scale(percentScale);
+                  leftHistGridlinesG.call(leftHistGridlines)
+
+                  //Update past histogram line lengths
+                  d3.selectAll("#histogram").each(function(){
+                    d = d3.select(this);
+                    percentSize = Number(d.attr("percent"))
+                    d.attr("y2", percentScale(percentSize))
+
+                  });
+
+
+                  var moveLines = histArea.append("line")
+                                          .attr("id", "histogram")
+                                          .attr("class", stockName)
+                                          .style("stroke", elonTurn?elonColor:covidColor)
+                                          .style("stroke-width", 5)
+                                          .attr("x1", dateScale(price_date[0].date))
+                                          .attr("y1", histogramPlotHeight/2.0)
+                                          .attr("x2", dateScale(price_date[0].date))
+                                          .attr("y2", percentScale(percent))
+                                          .attr("moveNumber", moveID)
+                                          .attr("character", character)
+                                          .attr("move", attacks)
+                                          // .attr("date", dt)
+                                          .attr("visibility", "")
+                                          .attr('percent', percent)
+                                          .attr("percent_after", price_date[0].percent_after)
+                                          .attr('close', price_date[0].Close)
+                                          .attr('date', price_date[0].Date)
+                }
+                else if(pre_price == price) {
+                }
+                else {
+
+                  percent = ((pre_price - price) / pre_price ) * 100
+                  decrease = (pre_price - price)
+
+                  //update percentage scale
+                  percentMemory.push(percent);
+                  percentMemory.push(-percent);
+                  newPercent = d3.extent(percentMemory)
+
+                  percentScale.domain([newPercent[0]*1.3,newPercent[1]*1.3]);
+
+                  leftHistAxis.scale(percentScale);
+                  leftHistAxisG.call(leftHistAxis)
+                  leftHistGridlines.scale(percentScale);
+                  leftHistGridlinesG.call(leftHistGridlines)
+
+                  //Update past histogram line lengths
+                  d3.selectAll("#histogram").each(function(){
+                    d = d3.select(this);
+                    percentSize = Number(d.attr("percent"))
+                    d.attr("y2", percentScale(percentSize))
+
+                  });
+
+                  moveLines = histArea.append("line")
+                                      .attr("id", "histogram")
+                                      .attr("class", stockName)
+                                      .style("stroke", elonTurn?elonColor:covidColor)
+                                      .style("stroke-width", 5)
+                                      .attr("x1", dateScale(price_date[0].date))
+                                      .attr("y1", histogramPlotHeight/2.0)
+                                      .attr("x2", dateScale(price_date[0].date))
+                                      .attr("y2", percentScale(-percent))
+                                      .attr("moveNumber", moveID)
+                                      .attr("character", character)
+                                      .attr("move", attacks)
+                                      // .attr("date", dt)
+                                      .attr("visibility", "")
+                                      .attr('percent', -percent)
+                                      .attr("percent_after", price_date[0].percent_after)
+                                      .attr('close', price_date[0].Close)
+                                      .attr('date', price_date[0].Date)
+                }
+
+                moveLines.on("mouseover",mouseOverLogic)
+                          .on("mouseout", mouseOutLogic)
+
+              }
+
+          }
+
+          moveID++; //increase moveID to prepare for next move
+        }
+
+//VICTORY CHECK --------------------------------------------------------------------
+
+        function victoryCheck(lastMove, character){
+
+          //check if anyone died
+          if(character==="covid"){
+            elon_deathCheck = Number(d3.select('#elon-decrease').attr("width")) - lastMove;
+          }
+          else if (character==="elon"){
+            covid_deathCheck = Number(d3.select('#covid-decrease').attr("width")) - lastMove;
+          }
+
+          if( elon_deathCheck <= 0 ){
+            setTimeout(function() {
+                window.alert("COIVD-19 Wins! 🎉🎉🎉 \nClick 'Ok' to Restart Match")
+                window.location.reload();
+            }, 1000);
+          }else if( covid_deathCheck <= 0 ){
+            setTimeout(function() {
+              window.alert("Elon Musk Wins! 🎉🎉🎉 \nClick 'Ok' to Restart Match")
+              window.location.reload();
+            }, 1000);
+          }
+        }
+
+// HEALTH BAR LOGIC --------------------------------------------------------------------
+
+        function updateHealthBarColor(character, current_width){
+          if(character==="elon"){
+            if (current_width > healthFull*0.6) {
+              d3.select('#covid-decrease').attr("fill", greenColor)
+            }else if (current_width > healthFull*0.3){
+              d3.select('#covid-decrease').attr("fill", "orange")
+            }else{
+              d3.select('#covid-decrease').attr("fill", "red")
+            }
+          }else if (character==="covid"){
+            if (current_width > healthFull*0.6) {
+              d3.select('#elon-decrease').attr("fill", greenColor)
+            }else if (current_width > healthFull*0.3){
+              d3.select('#elon-decrease').attr("fill", "orange")
+            }else{
+              d3.select('#elon-decrease').attr("fill", "red")
+            }
+          }
+
+        }
+
+
+// ARENA SELECTION UPDATES --------------------------------------------------------------------
+
+        function buttonFilterUpdate(){
+
+          stock = selectedStock;
+          //scales and gridlines
+
+          newDates = d3.extent(stock, d => d.date)
+          newDates = dateExtent;
+          newPrice = d3.extent(stock, d => d.Close)
+
+          //update scale
+          dateScale.domain(newDates);
+          priceScale.domain([newPrice[0],newPrice[1]*1.1]);
+
+
+          bottomAxis.scale(dateScale);
+          bottomAxisG.transition().call(bottomAxis)
+          bottomGridlines.scale(dateScale);
+          bottomGridlinesG.transition().call(bottomGridlines)
+
+          leftAxis.scale(priceScale);
+
+          leftAxisG.transition().remove()
+          leftGridlinesG.transition().remove()
+          leftAxisG.transition().duration(0).call(leftAxis)
+          leftGridlines.scale(priceScale);
+          leftGridlinesG.transition().duration(0).call(leftGridlines)
+
+
+          //stock chart
+          lineGen.x( d => dateScale(d.date) )
+                 .y( d => priceScale(d.Close) )
+                 .curve(d3.curveMonotoneX);
+
+          //remove previous graph
+          d3.selectAll(".line").remove();
+          d3.select('#focus-area').remove()
+          d3.select('#selection_rect').remove()
+          d3.select("#middle_l").remove()
+          d3.select("#box").remove()
+          d3.select("#text_box").remove()
+
+          // stockGraph.selectAll("path.line").remove() //clear
+
+          let stockCapped = stock.filter( d => {
+            return d.date >= dateExtent[0]
+                && d.date <= dateExtent[1];
+          });
+          // console.log(stockCapped);
+          chartArea.append("path")
+                   .datum(stockCapped)
+                   .attr("class", "line")
+                   .attr("fill", "none")
+                   .attr("stroke", colorScale(stock))
+                   .attr("stroke-width", 3)
+                   .attr("d", lineGen);
+
+           //mouseover markers
+           let mouseG = chartArea.append("g");
+
+           //draw reference line (x-axis)
+           let markLine = mouseG.append("line")
+                                   .attr("id","markLine")
+                                   .attr("fill","none")
+                                   .attr("stroke","black")
+                                   .attr("stroke-width",1)
+                                   .attr("y1",0)
+                                   .attr("y2",chartHeight)
+                                   .attr("visibility","hidden")
+
+
+            //draw value crosshair
+           let markVal = mouseG.append("circle")
+                                       .attr("id","markVal")
+                                       .attr("fill","none")
+                                       .attr("stroke","black")
+                                       .attr("stroke-width",2)
+                                       .attr("r",15)
+                                       .attr("visibility","hidden")
+
+
+            //append stock price label
+           let label = mouseG.append("text")
+                                 .attr("id","label")
+                                 .attr("font-family", "Helvetica, Sans-Serif")
+                                 .attr("font-size", "12px")
+                                 .attr("font-weight", "bold")
+                                 .attr("visibility","hidden")
+
+
+            //set hot area for event triggers
+           let activeRegion = mouseG.append("rect")
+                                         .attr("id","activeRegion")
+                                         .attr("width",chartWidth-1)
+                                         .attr("height",chartHeight)
+                                         .attr("fill","none")
+                                         .attr("pointer-events","all");
+
+           let findDate = d3.bisector( d => d.date ).right;
+
+
+           activeRegion.on("mouseover", function() {
+             markLine.attr("visibility","");
+             markVal.attr("visibility","");
+             label.attr("visibility","");
+           })
+
+           activeRegion.on("mouseout", function() {
+             markLine.attr("visibility","hidden");
+             markVal.attr("visibility","hidden");
+             label.attr("visibility","hidden");
+           })
+
+           activeRegion.on("mousemove", function(evt) {
+           // when mouse is moving
+
+             // retrieve mouse location from event
+             let location = d3.pointer(evt);
+             let x = location[0];
+
+             // take current pixel value and get back the coresponding data
+             let dateSnap = dateScale.invert(x);
+
+             // Find nearest date to snap marker to
+             let index = findDate(stockCapped, dateSnap);
+             let d = stockCapped[index];
+
+             let xPos = dateScale(d.date);
+             let yPos = priceScale(d.Close);
+             markLine.attr("x1",xPos).attr("x2",xPos);
+             markVal.attr("cx",xPos).attr("cy",yPos);
+
+             let markerText = "$"+ d.Close
+             label.text(markerText);
+             if (xPos < chartWidth / 2.0) {
+               label.attr("x",xPos+20).attr("y",yPos+5).attr("text-anchor","start");
+             }
+             else {
+               label.attr("x",xPos-20).attr("y",yPos+5).attr("text-anchor","end");
+             }
+           });
+
+
+        }
+
+        //ELON Buttons
+        d3.select("#date1").on("click", function() {
+          let ct_date = "4/1/2021"
+          removeMoveButtonStyling();
+          d3.select("#date1").attr("class"," muskbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "elon")
+        })
+        d3.select("#date2").on("click", function() {
+          let ct_date = "3/24/2021"
+          removeMoveButtonStyling();
+          d3.select("#date2").attr("class"," muskbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "elon")
+        })
+        d3.select("#date3").on("click", function() {
+          let ct_date = "3/13/2021"
+          removeMoveButtonStyling();
+          d3.select("#date3").attr("class"," muskbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "elon")
+        })
+        d3.select("#date4").on("click", function() {
+          let ct_date = "3/12/2021"
+          removeMoveButtonStyling();
+          d3.select("#date4").attr("class"," muskbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "elon")
+        })
+        d3.select("#date5").on("click", function() {
+          let ct_date = "3/5/2021"
+          removeMoveButtonStyling();
+          d3.select("#date5").attr("class"," muskbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "elon")
+        })
+        d3.select("#date6").on("click", function() {
+          let ct_date = "2/14/2021"
+          removeMoveButtonStyling();
+          d3.select("#date6").attr("class"," muskbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "elon")
+        })
+        d3.select("#date7").on("click", function() {
+          let ct_date = "2/4/2021"
+          removeMoveButtonStyling();
+          d3.select("#date7").attr("class"," muskbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "elon")
+        })
+        d3.select("#date8").on("click", function() {
+          let ct_date = "12/20/2020"
+          removeMoveButtonStyling();
+          d3.select("#date8").attr("class"," muskbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "elon")
+        })
+        d3.select("#date9").on("click", function() {
+          let ct_date = "7/2/2020"
+          removeMoveButtonStyling();
+          d3.select("#date9").attr("class"," muskbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "elon")
+        })
+        d3.select("#date10").on("click", function() {
+          let ct_date = "6/10/2020"
+          removeMoveButtonStyling();
+          d3.select("#date10").attr("class"," muskbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "elon")
+        })
+        d3.select("#date11").on("click", function() {
+          let ct_date = "5/11/2020"
+          removeMoveButtonStyling();
+          d3.select("#date11").attr("class"," muskbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "elon")
+        })
+        d3.select("#date12").on("click", function() {
+          let ct_date = "4/14/2020"
+          removeMoveButtonStyling();
+          d3.select("#date12").attr("class"," muskbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "elon")
+        })
+
+        //COVID Buttons
+        d3.select("#date-r1").on("click", function() {
+          let ct_date = "12/29/2020"
+          removeMoveButtonStyling();
+          d3.select("#date-r1").attr("class"," covidbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "covid")
+        })
+        // date 2 button: 03-24-2021
+        d3.select("#date-r2").on("click", function() {
+          let ct_date = "12/14/2020"
+          removeMoveButtonStyling();
+          d3.select("#date-r2").attr("class"," covidbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "covid")
+        })
+        d3.select("#date-r3").on("click", function() {
+          let ct_date = "11/8/2020"
+          removeMoveButtonStyling();
+          d3.select("#date-r3").attr("class"," covidbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "covid")
+        })
+        // date 3 button: 03-13-2021
+        d3.select("#date-r4").on("click", function() {
+          let ct_date = "10/2/2020"
+          removeMoveButtonStyling();
+          d3.select("#date-r4").attr("class"," covidbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "covid")
+        })
+        // date 4 button: 03-05-2021
+        d3.select("#date-r5").on("click", function() {
+          let ct_date = "9/29/2020"
+          removeMoveButtonStyling();
+          d3.select("#date-r5").attr("class"," covidbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "covid")
+        })
+        d3.select("#date-r6").on("click", function() {
+          let ct_date = "8/3/2020"
+          removeMoveButtonStyling();
+          d3.select("#date-r6").attr("class"," covidbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "covid")
+        })
+        d3.select("#date-r7").on("click", function() {
+          let ct_date = "7/7/2020"
+          removeMoveButtonStyling();
+          d3.select("#date-r7").attr("class"," covidbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "covid")
+        })
+        d3.select("#date-r8").on("click", function() {
+          let ct_date = "6/8/2020"
+          removeMoveButtonStyling();
+          d3.select("#date-r8").attr("class"," covidbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "covid")
+        })
+        d3.select("#date-r9").on("click", function() {
+          let ct_date = "5/27/2020"
+          removeMoveButtonStyling();
+          d3.select("#date-r9").attr("class"," covidbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "covid")
+        })
+        d3.select("#date-r10").on("click", function() {
+          let ct_date = "4/20/2020"
+          removeMoveButtonStyling();
+          d3.select("#date-r10").attr("class"," covidbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "covid")
+        })
+        d3.select("#date-r11").on("click", function() {
+          let ct_date = "4/18/2020"
+          removeMoveButtonStyling();
+          d3.select("#date-r11").attr("class"," covidbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "covid")
+        })
+        d3.select("#date-r12").on("click", function() {
+          let ct_date = "4/9/2020"
+          removeMoveButtonStyling();
+          d3.select("#date-r12").attr("class"," covidbutton lastSelectedMove");
+          buttonupdatebox(ct_date, "covid")
+        })
+
+
+
+
+        d3.select("#bitcoin-button").on("click", function() {
+          selectedStock = bitcoin;
+          stockName = "bitcoin";
+          removeMoveButtonStyling();
+          removeArenaButtonStyling();
+          d3.select("#bitcoin-button").attr("class"," stock-button lastSelected");
+          buttonFilterUpdate();
+          renderMemory();
+        })
+        d3.select("#dogecoin-button").on("click", function() {
+          selectedStock = doge;
+          stockName = "doge";
+          removeMoveButtonStyling();
+          removeArenaButtonStyling();
+          d3.select("#dogecoin-button").attr("class"," stock-button lastSelected");
+          buttonFilterUpdate();
+          renderMemory();
+        })
+        d3.select("#tesla-button").on("click", function() {
+          selectedStock = tesla;
+          stockName = "tesla";
+          removeMoveButtonStyling();
+          removeArenaButtonStyling();
+          d3.select("#tesla-button").attr("class"," stock-button lastSelected");
+          buttonFilterUpdate();
+          renderMemory();
+        })
+
+
+// SLIDER CODE --------------------------------------------------------------------
+        // Range
+        var sliderRange = d3.sliderBottom()
+                            .min(dateExtent[0])
+                            .max(dateExtent[1])
+                            .width(700)
+                            .tickFormat(d3.timeFormat('%b %d, %Y'))
+                            .ticks(0)
+                            .default(dateExtent)
+                            .handle(
+                              d3.symbol()
+                                .type(d3.symbolCircle)
+                                .size(400)()
+                            )
+                            .fill('#FEC737')
+                            .on('onchange', val => {
+                              d3.select('p#value-range').text(val.map(d3.timeFormat('%b %d, %Y')).join(' to '));
+                              selectedTimeRange = val.map(d3.timeFormat('%Y-%m-%d'));
+                              dateExtent[0]=timeParser(selectedTimeRange[0]);
+                              dateExtent[1]=timeParser(selectedTimeRange[1]);
+
+                              buttonFilterUpdate();
+                              moveButtonDisableUpdate();
+                              renderMemory();
+
+                            });
+
+        var gRange = d3.select('div#slider-range')
+                       .append('svg')
+                       .attr('width', 780)
+                       .attr('height', 60)
+                       .append('g')
+                       .attr('transform', 'translate(40,20)');
+
+        gRange.call(sliderRange);
+
+        d3.select('p#value-range')
+          .text( sliderRange.value()
+                            .map(d3.timeFormat('%b %d, %Y'))
+                            .join(' to ') );
+
+        d3.select("#clear-filter-button").on("click", function() {
+          // console.log(dateExtent);
+          dateExtent[0]=timeParser('2020-04-02');
+          dateExtent[1]=timeParser('2021-04-01');
+          buttonFilterUpdate();
+          var date = new Date("04/01/2020");
+          var startDate_milliseconds = date.getTime();
+          sliderRange.value([startDate_milliseconds, timeParser('2021-04-01')])
+          moveButtonDisableUpdate();
+        })
+
+
+// MOVE MEMORY RENDERING --------------------------------------------------------------------
+
+        function renderMemory(){
+
+          //remove old memory
+          d3.selectAll("#move-memory").remove();
+          d3.selectAll("#histogram").remove();
+
+          //reset state
+          percentMemory = [];
+          moveID = 0; //reset
+          MemoryMovesArray.forEach(d => {
+
+            // stockName = d.class;
+            if(stockName === d.class){
+              if(stockName==="bitcoin"){
+                selectedStock = bitcoin;
+              }else if(stockName==="doge"){
+                selectedStock = doge;
+              }else if(stockName==="tesla"){
+                selectedStock = tesla;
+              }
+              reloadMemory(d.date, d.character)
+            }
+
+          })
+
+        }
+
+// MOVE BUTTON linked with TIME SLIDER CODE --------------------------------------------------------------------
+
+        function moveButtonDisableUpdate(){
+          const timeparsers = d3.timeParse('%m-%d-%Y')
+
+          //loop over buttons diasble accoring to slider
+          for (i=1;i<=12;i++) {
+            let index_t = '#date' + i
+            let button_dis = document.querySelector(index_t)
+            //reuse time parser
+            let rt = timeparsers(button_dis.getAttribute('date'))
+            if (rt < dateExtent[0] || rt > dateExtent[1]) {
+
+              button_dis.disabled = true
+            }
+            else {
+              button_dis.disabled = false
+            }
+          }
+          for (i=1;i<=12;i++) {
+            let index_t2 = '#date-r' + i
+            let button_dis2 = document.querySelector(index_t2)
+            let rt2 = timeparsers(button_dis2.getAttribute('date'))
+            if (rt2 < dateExtent[0] || rt2 > dateExtent[1]) {
+
+              button_dis2.disabled = true
+            }
+            else {
+              button_dis2.disabled = false
+            }
+          }
+        }
+
+
+// BUTTON STYLING  --------------------------------------------------------------------
+
+        function removeMoveButtonStyling(){
+          d3.selectAll(".covidbutton").attr("class", "covidbutton");
+          d3.selectAll(".muskbutton").attr("class", "muskbutton");
+        }
+
+        function removeArenaButtonStyling(){
+          d3.selectAll(".stock-button").attr("class", "stock-button");
+        }
+
+
+        direction = true;
+
+        setInterval(function(){
+
+          //animate characters
+          direction = !direction;
+          // console.log(direction);
+          d3.select(".elon-character").transition().duration(500).style("transform", direction?"rotate(15deg)":"rotate(-5deg)");
+          d3.select(".covid-character").transition().duration(500).style("transform", direction?"rotate(-20deg)":"rotate(10deg)");
+
+
+        }, 1000);
+
+// MOUSEOVER & MOUSEOUT --------------------------------------------------------------------
+
+        function mouseOverLogic(d){
+          //remove updates
+          d3.select('#focus-area').remove()
+
+          d3.select("#box").remove()
+          d3.select("#character-box").remove()
+          d3.select("#text_box").remove()
+
+          d3.select(".move-text").remove()
+          d3.select(".attack-text").remove()
+
+          d3.select("#middle_l").remove()
+          d3.select("#selection_rect").remove()
+
+          removeMoveButtonStyling();
+
+          //defocusing the other points
+          d3.selectAll("#move-memory").attr("opacity",0.1)
+          d3.selectAll("#histogram").attr("opacity",0.1)
+          d3.selectAll("#selection_rect").attr("opacity",0.1)
+          d3.selectAll("#middle_l").attr("opacity",0.1)
+
+
+
+          currentElement = d3.select(this);
+          currentMoveNum = String(currentElement.attr("moveNumber"))
+          currentCharacter = currentElement.attr("character");
+          currentDate = currentElement.attr("date");
+
+          renderMemoryState = true;
+          buttonupdatebox(currentDate, currentCharacter)
+
+          //selecting all relevant elements when in hover state for graph
+          d3.selectAll("#move-memory").each(function() {
+            dot = d3.select(this); // the current element
+
+            if(dot.attr("moveNumber") == currentMoveNum){
+              dot.attr("opacity",1.0)
+              dot.attr("r",10)
+            }
+          });
+
+          d3.selectAll("#histogram").each(function() {
+            line = d3.select(this); // the current element
+
+            if(line.attr("moveNumber") == currentMoveNum){
+              line.attr("opacity",1.0)
+              line.style("stroke-width",10)
+            }
+          });
+          //
+          // var f = d3.format(".2f")
+          // // console.log(d.path[0].getAttribute('percent_after'))
+          // stringout = "Date: " + d.path[0].getAttribute('date') +"  Price:   $"+ f(d.path[0].getAttribute('close')) +' '+ "  Change in future 5 days:  " + f(d.path[0].getAttribute('percent_after')) + '%'
+          //
+          // let detailcolor = (d.path[0].getAttribute('character') == 'elon')?elonColor:covidColor
+          //
+          // details.append("text")
+          //        .text(stringout)
+          //        .attr("x", chartWidth/2 - stringLen(stringout)/2)
+          //        .attr("y", 510).attr("visibility","")
+          //        .attr("id","details")
+          //        .attr('fill', detailcolor)
+        }
+
+        function mouseOutLogic(d){
+
+            renderMemoryState = false;
+
+            // d3.selectAll('#details')
+            //   .attr("visibility","hidden");
+
+            //RE-focusing the other points
+            d3.selectAll("#move-memory").attr("opacity",1.0)
+            d3.selectAll("#histogram").attr("opacity",1.0)
+            d3.selectAll("#selection_rect").attr("opacity",1.0)
+            d3.selectAll("#middle_l").attr("opacity",1.0)
+
+            d3.select("#text_box").remove()
+            d3.select(".move-text").remove()
+            d3.select(".attack-text").remove()
+            d3.select("#box").remove()
+            d3.select("#character-box").remove()
+            d3.select("#middle_l").remove()
+            d3.select("#selection_rect").remove()
+
+            currentElement = d3.select(this);
+            currentMoveNum = String(currentElement.attr("moveNumber"))
+            currentCharacter = currentElement.attr("character");
+            currentDate = currentElement.attr("date");
+
+            //selecting all relevant elements when in hover state for graph
+            d3.selectAll("#move-memory").each(function() {
+              dot = d3.select(this); // the current element
+
+              if(dot.attr("moveNumber") == currentMoveNum){
+                dot.attr("r",5)
+              }
+            });
+
+            d3.selectAll("#histogram").each(function() {
+              line = d3.select(this); // the current element
+
+              if(line.attr("moveNumber") == currentMoveNum){
+                line.attr("opacity",1.0)
+                line.style("stroke-width",5)
+              }
+            });
+
+        }
+
+      };
+      requestData();
+      </script>
+    </div>
+    <div>
+        <blockquote>
+          <footer class="resource">
+              <a class="head"> Resources: </a> <br>
+              <a href="https://bitcoin.org/en/">Favicon</a> <br>
+              <a href="https://www.google.com/url?sa=i&url=https%3A%2F%2Fcryptonetwork.news%2Felon-musk-humor-strikes-again%2F&psig=AOvVaw1Fxpv3QqnkBPRv6Wx5WIFE&ust=1618097527680000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKD9vpap8u8CFQAAAAAdAAAAABAF">Elon Character Image</a> <br>
+              <a href="https://img.mlo-online.com/files/base/ebm/mlo/image/2021/01/Pixabay_virus_5468274_1280.600edb47c7120.png?auto=format&w=720">Covid Character Image</a> <br>
+              <a href="https://twitter.com/elonmusk?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor">Link to Elon Musk's Tweets</a> <br>
+              <a href="https://www.nbcnews.com/health/health-news/coronavirus-timeline-tracking-critical-moments-covid-19-n1154341">Link to COVID-19 Events</a> <br>
+              <a href="https://finance.yahoo.com/">Dataset: download from Yahoo Finance from 2020-04-02 - 2021-04-01</a>
+          </footer>
+      </blockquote>
+      </div>
+
+  </body>
+</html>

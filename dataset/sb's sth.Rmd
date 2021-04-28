@@ -1,0 +1,52 @@
+---
+title: "sb's sth"
+author: "Tong Z"
+date: "4/14/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+TSLA<-read.csv("/Users/outgoingcharlene/Downloads/INFO-3300-5100-P2-master/dataset/TSLA.csv")
+head(TSLA)
+BTCUSD<-read.csv("/Users/outgoingcharlene/Downloads/INFO-3300-5100-P2-master/dataset/BTC-USD.csv")
+head(BTCUSD)
+DOGEUSD<-read.csv("/Users/outgoingcharlene/Downloads/INFO-3300-5100-P2-master/dataset/DOGE-USD.csv")
+head(DOGEUSD)
+```
+
+```{r}
+my_data<-TSLA
+clean<-function(my_data = TSLA){
+  mean_5_before<-rep(NA,length(my_data[,1]))
+  mean_5_after<-rep(NA,length(my_data[,1]))
+  percent_before<-rep(NA,length(my_data[,1]))
+  percent_after<-rep(NA,length(my_data[,1]))
+  for (i in 2:length(my_data$Close)){
+    if (my_data$Close[i]=="null"){
+        my_data$Close[i]=my_data$Close[i-1]
+    }
+  }
+  my_data$Close=as.numeric(my_data$Close)
+  View(my_data)
+  for (i in 1:(length(my_data[,1])-4)){
+    mean_5_after[i]<-(my_data$Close[i+4]-my_data$Close[i])/4
+    percent_after[i]<-(my_data$Close[i+4]-my_data$Close[i])/my_data$Close[i]*100
+  }
+  for (i in 5:(length(my_data[,1]))){
+    mean_5_before[i]<-(my_data$Close[i]-my_data$Close[i-4])/4
+    percent_before[i]<-(my_data$Close[i]-my_data$Close[i-4])/my_data$Close[i-4]*100
+    }
+  new.frame<-cbind(my_data,mean_5_before,percent_before,mean_5_after,percent_after)
+  return(new.frame)
+  
+}
+
+summary(BTCUSD)
+write.csv(clean(TSLA),"/Users/outgoingcharlene/Downloads/INFO-3300-5100-P2-master/TSLA_1.csv",row.names = T)
+write.csv(clean(BTCUSD),"/Users/outgoingcharlene/Downloads/INFO-3300-5100-P2-master/BTC-USD_1.csv",row.names = T)
+write.csv(clean(DOGEUSD),"/Users/outgoingcharlene/Downloads/INFO-3300-5100-P2-master/DOGEUSD_1.csv",row.names = T)
+```
